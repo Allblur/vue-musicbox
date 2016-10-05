@@ -10,9 +10,9 @@
 			</div>
 		</div>
 		<div class="search-result">
-			<ul class="result-list" v-if="searchResult">
-				<li v-for="(item,index) in searchResult">
-					<router-link :to="{ name: 'detail' }" class="block" v-if="item.creator">
+			<ul class="result-list" v-if="results">
+				<li v-for="(item,index) in results">
+					<router-link :to="{ name: 'detail', params: { playlistId: item.id } }" class="block" v-if="item.creator">
 						<img :src="item.coverImgUrl" :alt="item.name" class="block rsimg" width="50" height="50">
 						<div class="result-info">
 							<h3 class="result-t">{{item.name}}</h3>
@@ -23,7 +23,7 @@
 							</p>
 						</div>
 					</router-link>
-					<router-link :to="{ name: 'detail' }" class="block" v-else>
+					<a class="block" v-else>
 						<img :src="item.album.artist.img1v1Url" :alt="item.name" class="block rsimg" width="50" height="50">
 						<div class="result-info">
 							<h3 class="result-t">{{item.name}}</h3>
@@ -31,7 +31,7 @@
 							{{item.artists[0].name}}&nbsp;-&nbsp;{{item.album.name}}
 							</p>
 						</div>
-					</router-link>
+					</a>
 				</li>
 			</ul>
 			<h2 v-else>暂无结果，请重新搜索</h2>
@@ -94,7 +94,10 @@
 			topbar:TopBar
 		},
 		computed:{
-			...mapGetters({searchResult:'searchResult',searchKeyword:'searchKeyword'})
+			...mapGetters({searchResult:'searchResult',searchKeyword:'searchKeyword'}),
+			results(){
+				return this.searchResult
+			}
 		},
 		methods:{
 			...mapActions(['updateSearchResult','changeSearchKeyword']),

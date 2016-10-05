@@ -118,7 +118,7 @@
 	        	this.search(2,10,()=>{
 	        		this.$nextTick(() => {
 	                	setTimeout(() => {
-				            this.$router.push({path: '/search'})
+				            this.$router.push({name: 'search'})
 		                }, 100)
 		            })
 	        	})
