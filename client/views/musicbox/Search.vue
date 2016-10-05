@@ -63,7 +63,7 @@
 			.result-info
 				margin-left 1.65rem
 				height 1.6rem
-				border-bottom 1px solid #dedede
+				position relative
 				overflow hidden
 				.result-t
 					height .6rem
@@ -75,6 +75,16 @@
 					line-height .95rem
 					overflow hidden
 					color #777
+			.result-info:after
+				content ''
+				position absolute
+				bottom 0
+				left 0
+				width 100%
+				height 1px
+				background-color #dedede
+				transform scaleY(0.5)
+				transform-origin 0 bottom
 			.rsimg
 				width 1.5rem
 				height 1.5rem
