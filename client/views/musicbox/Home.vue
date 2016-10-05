@@ -43,6 +43,15 @@
     import { mapGetters, mapActions } from 'vuex'
     import TopBar from '../../components/TopBar.vue'
 
+    function fetchItem(store) {
+        const url = 'http://odetoall.applinzi.com/weixin/gettop/'
+        const data = {
+            offset:6,
+            limit:6
+        }
+        return store.dispatch('updateIndexData', {ajaxurl:url,querydata:data})
+    }
+
 	export default{
 		data(){
 			return{
@@ -52,6 +61,7 @@
         components:{
             topbar:TopBar
         },
+        preFetch:fetchItem,
 		methods:{
             ...mapActions(['changePbIsShow'])
         },
@@ -60,6 +70,9 @@
                 pbIsShow:'pbIsShow',
                 searchKeyword:'searchKeyword'
             })
+        },
+        beforeMount(){
+            fetchItem(this.$store)
         },
         created(){
             this.changePbIsShow(false)

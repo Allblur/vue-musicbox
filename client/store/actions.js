@@ -1,18 +1,18 @@
 import fetchItem from './api'
 
 const makeAction = (type) => {
-	return ({ commit }, ...args) => commit(type, ...args)
+	return ({commit, state}, ...args) => commit(type, ...args)
 }
 
 const fetchMakeAction = (type) => {
-	return ({commit},arg) => {
-		if (arg.ajaxurl) {
-			return fetchItem(arg).then((items) => {
-				commit(type, items.list)
-			})
+		return ({commit, state},arg) => {
+			if (arg.ajaxurl) {
+				return fetchItem(arg).then((items) => {
+					commit(type, items.list)
+				})
+			}
+			commit(type, arg)
 		}
-		commit(type, arg)
-	}
 }
 
 export const changePbIsShow = makeAction('CHANGE_PDISSHOW')

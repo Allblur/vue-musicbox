@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<banner></banner>
+		<banner :img="images"></banner>
 		<div class="m-menu">
 			<div class="menu-box">
 				<div class="menu-pic"><svg width="50" height="50" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g class="transform-group"><g transform="scale(0.050, 0.050)"><path d="M510.54537 63.811328c-246.707868 0-446.709995 200.001103-446.709995 446.709995 0 246.707868 200.001103 446.716134 446.709995 446.716134 246.707868 0 446.708971-200.008266 446.708971-446.716134C957.254342 263.812431 757.253238 63.811328 510.54537 63.811328zM361.642039 629.643374c0 16.446577-13.33368 29.78128-29.780257 29.78128s-29.78128-13.33368-29.78128-29.78128l0-59.561537c0-16.445554 13.334703-29.780257 29.78128-29.780257s29.780257 13.33368 29.780257 29.780257L361.642039 629.643374zM480.76409 629.643374c0 16.446577-13.334703 29.78128-29.78128 29.78128-16.445554 0-29.780257-13.33368-29.780257-29.78128L421.202553 465.849914c0-16.446577 13.334703-29.780257 29.780257-29.780257 16.446577 0 29.78128 13.33368 29.78128 29.780257L480.76409 629.643374zM599.887165 629.643374c0 16.446577-13.33368 29.78128-29.780257 29.78128-16.446577 0-29.782304-13.33368-29.782304-29.78128L540.324604 525.411451c0-16.445554 13.334703-29.780257 29.782304-29.780257 16.445554 0 29.780257 13.334703 29.780257 29.780257L599.887165 629.643374zM719.010239 629.643374c0 16.446577-13.334703 29.78128-29.782304 29.78128-16.444531 0-29.780257-13.33368-29.780257-29.78128L659.447678 391.398248c0-16.446577 13.334703-29.78128 29.780257-29.78128 16.446577 0 29.782304 13.334703 29.782304 29.78128L719.010239 629.643374z" fill="#eb4f38"></path></g></g></svg></div>
@@ -19,7 +19,7 @@
 			<h3 class="mt-title">推荐歌单</h3>
 		</div>
 		<div class="mt-box">
-			<div class="mt-item" v-for="(item,index) in indexdatas" @click="toDetail(item.id)">
+			<div class="mt-item" v-for="(item,index) in indexData" @click="toDetail(item.id)">
 				<div class="mti-box">
 					<div class="mti-img"><img :src="item.coverImgUrl" :alt="item.name"></div>
 				</div>
@@ -98,6 +98,15 @@
 	import { mapGetters, mapActions } from 'vuex'
 	import Banner from '../../components/Banner.vue'
     
+    function fetchBannerItem(store) {
+        const url = 'http://odetoall.applinzi.com/weixin/getnewalbum/'
+        const data = {
+            offset:5,
+            limit:5
+        }
+        return store.dispatch('updateBannerData', {ajaxurl:url,querydata:data})
+    }
+	
 	export default{
 		data(){
 			return{
@@ -109,28 +118,22 @@
 		},
 		computed:{
             ...mapGetters({
-                indexData:'indexData'
+                indexData:'indexData',
+                bannerData:'bannerData'
             }),
-            indexdatas(){
-                return this.indexData
+            images(){
+                return this.bannerData
             }
         },
+        preFetch:fetchBannerItem,
 		methods:{
 			...mapActions(['updateIndexData','updatePlaylistDetail']),
-			getIndexData(offset,limit){
-				let url = 'http://odetoall.applinzi.com/weixin/gettop/'
-				let data = {
-                    offset:offset,
-                    limit:limit
-                }
-                this.updateIndexData({ajaxurl:url,querydata:data})
-			},
 			toDetail(id){
 				this.$router.push({name: 'detail', params: { playlistId: id }})
 			}
 		},
-		created(){
-			this.getIndexData(6,6)
+		beforeMount(){
+			fetchBannerItem(this.$store)
 		}
     }
 </script>

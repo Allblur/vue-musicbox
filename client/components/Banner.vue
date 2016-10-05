@@ -3,19 +3,19 @@
         <div class="banner-box"
              :style="{ transform:'translateX(-'+n+'%)',transition:speed}">
             <div class="banner-img"
-                 v-for="(img,key) in images"
+                 v-for="(m,key) in img"
                  :style="{ transform:'translateX('+key+'00%)' }"
                  @touchstart="tstart"
                  @touchmove="tmove"
                  @touchend="tend"
-                 @click="toDetail(img.id)"
+                 @click="toDetail(m.id)"
             >
-                <img :src = "img.picUrl">
+                <img :src = "m.picUrl" :alt="m.name">
             </div>
         </div>
         <div class="control-box">
             <ul class="inline-block circle">
-                <li v-for="(img,key) in images"
+                <li v-for="(m,key) in img"
                     :class="[key==index ? 'on':'']" class="inline-block">
                 </li>
             </ul>
@@ -61,7 +61,7 @@
                 background-color #3f3f3f
 </style>
 <script>
-    import { mapGetters, mapActions } from 'vuex'
+
     export default{
         data(){
             return{
@@ -77,16 +77,13 @@
                 speed:'.3s'
             }
         },
+        props:['img'],
         computed:{
-            ...mapGetters({
-                bannerData:'bannerData'
-            }),
             images(){
-                return this.bannerData
+                return this.img
             }
         },
         methods:{
-            ...mapActions(['updateBannerData','updatePlaylistDetail']),
             tstart(event){
                 let e = event || window.event
                 this.drag._n = this.n
@@ -153,20 +150,9 @@
                     this.turnNext()
                 }
             },
-            getBannerData(offset,limit){
-                let url = "http://odetoall.applinzi.com/weixin/getnewalbum/"
-                let data = {
-                    offset:offset,
-                    limit:limit
-                }
-                this.updateBannerData({ajaxurl:url,querydata:data})
-            },
             toDetail(id){
                 this.$router.push({name: 'detail', params: { playlistId: id }})
             }
-        },
-        created(){
-            this.getBannerData(5,5)
         },
         mounted(){
             setTimeout(() => {

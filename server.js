@@ -58,7 +58,7 @@ function createRenderer (bundle) {
 }
 
 app.use('/dist', express.static(resolve('./dist')))
-app.use(favicon(resolve('./client/assets/favicon.ico')))
+app.use(favicon(resolve('./client/assets/img/favicon.ico')))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('*', (req, res, next) => {
