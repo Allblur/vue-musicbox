@@ -4,6 +4,7 @@ import store from './store/store'
 import router from './router'
 import { sync } from 'vuex-router-sync'
 import * as filters from './filters'
+import * as directives from './directives'
 
 // sync the router with the vuex store.
 // this registers `store.state.route`
@@ -12,6 +13,10 @@ sync(store, router)
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   	Vue.filter(key, filters[key])
+})
+
+Object.keys(directives).forEach(key => {
+  	Vue.directive(key, directives[key])
 })
 
 // create the app instance.

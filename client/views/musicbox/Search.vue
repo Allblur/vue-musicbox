@@ -5,13 +5,17 @@
         </div>
 		<div class="search-tabs">
 			<div class="search-tab">
-				<a class="inline-block search-tab-btn active" @click="search(2,10)"><span>歌单</span></a>
-				<a class="inline-block search-tab-btn" @click="search(1,15)"><span>单曲</span></a>
+				<a class="inline-block search-tab-btn active" @click="search(2,10,1)" v-addactive="{classname:'active',vflag:flag,elclass:'inline-block search-tab-btn'}">
+					<span>歌单</span>
+				</a>
+				<a class="inline-block search-tab-btn" @click="search(1,15,2)" v-addactive="{classname:'active',vflag:!flag,elclass:'inline-block search-tab-btn'}">
+					<span>单曲</span>
+				</a>
 			</div>
 		</div>
 		<div class="search-result">
-			<ul class="result-list" v-if="results">
-				<li v-for="(item,index) in results">
+			<ul class="result-list" v-if="searchResult">
+				<li v-for="(item,index) in searchResult">
 					<router-link :to="{ name: 'detail', params: { playlistId: item.id } }" class="block" v-if="item.creator">
 						<img :src="item.coverImgUrl" :alt="item.name" class="block rsimg" width="50" height="50">
 						<div class="result-info">
@@ -97,26 +101,25 @@
 	export default{
 		data(){
 			return{
-				msg:'wellcome to vue-musicbox'
+				msg:'wellcome to vue-musicbox',
+				flag:true
 			}
 		},
 		components:{
 			topbar:TopBar
 		},
 		computed:{
-			...mapGetters({searchResult:'searchResult',searchKeyword:'searchKeyword'}),
-			results(){
-				return this.searchResult
-			}
+			...mapGetters({searchResult:'searchResult',searchKeyword:'searchKeyword'})
 		},
 		methods:{
 			...mapActions(['updateSearchResult','changeSearchKeyword']),
-			search(t,n){
+			search(t,n,type){
 	            //搜索t 1：单曲，2：歌单，3：歌手，4：专辑，5：mv
 	            //条数n 默认100条
 	            let url = 'http://odetoall.applinzi.com/weixin/sreach/'
 	            let data = {w:this.searchKeyword,t:t,n:n}
 	            this.updateSearchResult({ajaxurl:url,querydata:data})
+	            this.flag = !this.flag
 	        },
 		}
    	}
