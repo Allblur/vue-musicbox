@@ -71,7 +71,7 @@
 			.play-all
 				display block
 				padding-left .63rem
-				background url(../../assets/play.png) left center / 6% no-repeat
+				background url(../../assets/img/play.png) left center / 6% no-repeat
 			span
 				color #9a9a9a
 		.dl:after
@@ -126,7 +126,7 @@
 						height 1.6rem
 						top 0
 						right 0
-						background #fff url(../../assets/delete.png) center / 55% no-repeat
+						background #fff url(../../assets/img/delete.png) center / 55% no-repeat
 						transform rotate(45deg)
 </style>
 <script>

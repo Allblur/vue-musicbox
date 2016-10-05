@@ -129,7 +129,7 @@
 							transform-origin 0 bottom
 						.active
 							padding-left 0.6rem
-							background url(../assets/pa.png) left center no-repeat
+							background url(../assets/img/pa.png) left center no-repeat
 							background-size .5rem .5rem
 							color #eb4f38
 						.delete-song
@@ -139,7 +139,7 @@
 							display block
 							width 1rem
 							height 1rem
-							background url(../assets/delete.png) center no-repeat
+							background url(../assets/img/delete.png) center no-repeat
 							background-size .5rem .5rem
 							overflow hidden
 							z-index 5
@@ -237,28 +237,28 @@
 				overflow hidden
 				font-size 0px
 			.play-icon
-				background url(../assets/play.png) center no-repeat
+				background url(../assets/img/play.png) center no-repeat
 				background-size 60%
 			.pause-icon
-				background url(../assets/pause.png) center no-repeat
+				background url(../assets/img/pause.png) center no-repeat
 				background-size 60%
 			.prev-icon
-				background url(../assets/prev.png) center no-repeat
+				background url(../assets/img/prev.png) center no-repeat
 				background-size 34%
 			.next-icon
-				background url(../assets/next.png) center no-repeat
+				background url(../assets/img/next.png) center no-repeat
 				background-size 34%
 			.random
-				background url(../assets/random.png) center no-repeat
+				background url(../assets/img/random.png) center no-repeat
 				background-size 34%
 			.sloop
-				background url(../assets/sloop.png) center no-repeat
+				background url(../assets/img/sloop.png) center no-repeat
 				background-size 40%
 			.loop
-				background url(../assets/loop.png) center no-repeat
+				background url(../assets/img/loop.png) center no-repeat
 				background-size 36.8%
 			.pmenu-icon
-				background url(../assets/pmenu.png) center no-repeat
+				background url(../assets/img/pmenu.png) center no-repeat
 				background-size 42%
 
 </style>

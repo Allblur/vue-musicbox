@@ -56,7 +56,7 @@
 				border #fff solid 1px
 				border-left-width 0px
 				border-radius 0 4px 4px 0
-				background #fff url(../assets/search.png) center no-repeat
+				background #fff url(../assets/img/search.png) center no-repeat
 				background-size 50%
 				
 		a
@@ -66,7 +66,7 @@
 				width 100%
 				height 100%
 				flex 1
-				background url(../assets/music.png) center no-repeat
+				background url(../assets/img/music.png) center no-repeat
 				background-size 100%
 		a
 			width 10%
@@ -76,7 +76,7 @@
 			display inline-block
 			color #fff
 		#comeback
-			background url(../assets/comeback.png) center no-repeat
+			background url(../assets/img/comeback.png) center no-repeat
 			background-size 70%
 </style>
 <script>
