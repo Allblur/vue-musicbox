@@ -25,7 +25,7 @@
 							{{item.album.artists[0].name}} - {{item.album.name}}
 							</span>
         				</div>
-        				<span class="block add-playsongitem">添加到播放列表</span>
+        				<span class="block add-playsongitem" @click="addPlaysongItem(index)"></span>
         			</li>
         		</ul>
         	</div>
@@ -64,8 +64,9 @@
 		.dl,.playlist-item
 			padding 0 .3rem
 		.dl
-			height 1.2rem
-			line-height 1.2rem
+			height 1.4rem
+			line-height 1.4rem
+			position relative
 			font-size 16px
 			.play-all
 				display block
@@ -73,10 +74,21 @@
 				background url(../../assets/play.png) left center / 6% no-repeat
 			span
 				color #9a9a9a
+		.dl:after
+			content ''
+			position absolute
+			bottom 0
+			left 0
+			width 100%
+			height 1px
+			background-color #dedede
+			transform scaleY(0.5)
+			transform-origin 0 bottom
 		.playlist-item
 			ul
 				li
 					height 1.6rem
+					position relative
 					overflow hidden
 					.item-index
 						height 1.6rem
@@ -85,9 +97,10 @@
 						float left
 					.song-info
 						height 1.25rem
-						border-top 1px solid #dedede
+						position relative
 						padding .174rem 0
 						margin-left .71rem
+						margin-right .8rem
 						span
 							height .625rem
 							line-height .625rem
@@ -97,7 +110,24 @@
 							font-size .46rem
 						.song-art
 							color #9a9a9a
-
+					.song-info:before
+						content ''
+						position absolute
+						bottom 0
+						left 0
+						width 100%
+						height 1px
+						background-color #dedede
+						transform scaleY(0.5)
+						transform-origin 0 bottom
+					.add-playsongitem
+						position absolute
+						width 1rem
+						height 1.6rem
+						top 0
+						right 0
+						background #fff url(../../assets/delete.png) center / 55% no-repeat
+						transform rotate(45deg)
 </style>
 <script>
 	import { mapGetters, mapActions } from 'vuex'
@@ -111,7 +141,8 @@
 		},
 		computed:{
             ...mapGetters({
-                playlistDetail:'playlistDetail'
+                playlistDetail:'playlistDetail',
+                songItme:'songItme'
             }),
             playlistdetails(){
                 return this.playlistDetail
@@ -124,7 +155,7 @@
 			topbar:TopBar
 		},
 		methods:{
-			...mapActions(['updatePlaylistDetail','updateSongItem']),
+			...mapActions(['updatePlaylistDetail','updateSongItem','addSongItem']),
 			getPlaylistDetail(){
 				let id = this.$route.params.playlistId
 				let url = 'http://odetoall.applinzi.com/weixin/playlistdetail/'+id+'/'
@@ -133,6 +164,11 @@
 			playAll(){
 				this.updateSongItem(this.playlistDetail.tracks)
 				localStorage.setItem("songItem", JSON.stringify(this.playlistDetail.tracks))
+			},
+			addPlaysongItem(index){
+				let list = [this.playlistDetail.tracks[index]]
+				this.addSongItem(list)
+				localStorage.setItem("songItem", JSON.stringify(this.songItme))
 			}
 		},
 		created(){

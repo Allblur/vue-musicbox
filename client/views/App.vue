@@ -23,7 +23,7 @@
         color #454545
         text-decoration none
 
-    input,select,button
+    input,select,button,textarea,a
         -webkit-appearance none
         -webkit-tap-highlight-color rgba(0, 0, 0, 0)
 

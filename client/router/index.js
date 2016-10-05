@@ -32,36 +32,12 @@ export default new Router({
 		{
 			name:'search',
 			path:'/search',
-			component:Search/*,
-			children:[
-				{
-					path:'/playlist',
-					name:'searchplaylist',
-					component:Playlist
-				},
-				{
-					path:'/single',
-					name:'searchsingle',
-					component:Single
-				}
-			]*/
+			component:Search
 		},
 		{
 			name:'detail',
 			path:'/detail/:playlistId',
-			component:Detail/*,
-			children:[
-				{
-					path:'/playlist/:id',
-					name:'playlistdetail',
-					component:PlayDetail
-				},
-				{
-					path:'/song/:id',
-					name:'songdetail',
-					component:SongDetail
-				}
-			]*/
+			component:Detail
 		},
 		{
 			name:'play',

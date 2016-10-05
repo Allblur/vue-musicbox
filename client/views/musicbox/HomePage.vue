@@ -39,9 +39,19 @@
 	box-sizing border-box
 	margin 0px auto
 	padding .3rem .2rem
-	border 1px solid #ededed
+	position relative
 	text-align center
     align-items center
+.m-menu:after
+	content ''
+	position absolute
+	bottom 0
+	left 0
+	width 100%
+	height 1px
+	background-color #dedede
+	transform scaleY(0.5)
+	transform-origin 0 bottom
 	.menu-box
 		width 33.333%
 		.menu-pic

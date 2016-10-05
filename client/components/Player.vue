@@ -73,7 +73,7 @@
 		background-color rgba(255,255,255,.98)
 		box-shadow 0 -1px 1px 1px #fdfdfd
 		left 0px
-		z-index: 1
+		z-index: 9999
 		.song-list-box
 			height 7.3rem
 			border-top 1px solid #dedede
@@ -113,10 +113,20 @@
 							display block
 							height 1.2rem
 							line-height 1.2rem
-							border-bottom 1px solid #ededed
+							position relative
 							white-space nowrap
 							text-overflow ellipsis
 							overflow hidden
+						.select-song:after
+							content ''
+							position absolute
+							bottom 0
+							left 0
+							width 100%
+							height 1px
+							background-color #dedede
+							transform scaleY(0.5)
+							transform-origin 0 bottom
 						.active
 							padding-left 0.6rem
 							background url(../assets/pa.png) left center no-repeat
