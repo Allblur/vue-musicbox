@@ -1,13 +1,17 @@
 <template>
 	<div>
-        <div class="playlist-detail" v-if="playlistdetails.name">
+        <div class="playlist-detail" v-if="playlistDetail.name">
         	<div class="detail-header">
         		<div class="dh">
-        			<img :src="playlistdetails.coverImgUrl" :alt="playlistdetails.name" class="block cover-img">
+        			<img :src="playlistDetail.coverImgUrl" :alt="playlistDetail.name" class="block cover-img">
 					<div class="detail-info">
-						<h3>{{playlistdetails.name}}</h3>
+						<h3>{{playlistDetail.name}}</h3>
 						<div class="pl-creator">
-							<span v-if="playlistdetails.creator">创建者：{{playlistdetails.creator.nickname}}</span>
+							<span v-if="playlistDetail.creator">创建者：{{playlistDetail.creator.nickname}}</span>
+						</div>
+						<div class="pl-info">
+							<span v-if="playlistDetail.playCount">播放次数：{{playlistDetail.playCount}}</span>&nbsp;&nbsp;
+							<span v-if="playlistDetail.trackCount">收藏：{{playlistDetail.trackCount}}</span>
 						</div>
 					</div>
         		</div>
@@ -17,7 +21,7 @@
         	</div>
         	<div class="playlist-item">
         		<ul>
-        			<li v-for="(item,index) in playlistdetails.tracks">
+        			<li v-for="(item,index) in playlistDetail.tracks">
         				<span class="block item-index">{{index+1}}</span>
         				<div class="song-info">
         					<span class="song-name">{{item.name}}</span>
@@ -54,7 +58,6 @@
 					h3
 						height 1.5rem
 						line-height .7rem
-						margin-top .5rem
 						overflow hidden
 						font-weight normal
 						font-size .48rem
@@ -128,6 +131,12 @@
 						right 0
 						background #fff url(../../assets/img/delete.png) center / 55% no-repeat
 						transform rotate(45deg)
+	.ds
+		p
+			height 1.2rem
+			line-height 1.2rem
+			text-align center
+			font-size .48rem
 </style>
 <script>
 	import { mapGetters, mapActions } from 'vuex'
@@ -144,9 +153,6 @@
                 playlistDetail:'playlistDetail',
                 songItme:'songItme'
             }),
-            playlistdetails(){
-                return this.playlistDetail
-            },
             playlistcount(){
             	return this.playlistDetail.tracks ? this.playlistDetail.tracks.length : 0
             }
@@ -157,8 +163,9 @@
 		methods:{
 			...mapActions(['updatePlaylistDetail','updateSongItem','addSongItem']),
 			getPlaylistDetail(){
-				let id = this.$route.params.playlistId
-				let url = 'http://odetoall.applinzi.com/weixin/playlistdetail/'+id+'/'
+				this.updatePlaylistDetail({})
+				const id = this.$route.params.playlistId
+				const url = 'http://odetoall.applinzi.com/weixin/playlistdetail/'+id+'/'
 				this.updatePlaylistDetail({ajaxurl:url,querydata:{}})
 			},
 			playAll(){
@@ -166,7 +173,7 @@
 				localStorage.setItem("songItem", JSON.stringify(this.playlistDetail.tracks))
 			},
 			addPlaysongItem(index){
-				let list = [this.playlistDetail.tracks[index]]
+				const list = [this.playlistDetail.tracks[index]]
 				this.addSongItem(list)
 				localStorage.setItem("songItem", JSON.stringify(this.songItme))
 			}

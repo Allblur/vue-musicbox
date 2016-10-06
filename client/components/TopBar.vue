@@ -102,12 +102,10 @@
 		methods:{
 			...mapActions(['updateSearchResult','changeSearchKeyword']),
 			search(t,n,after){
-	            //t 1：单曲，2：歌单，3：歌手，4：专辑，5：mv
-	            //n 默认100条
-	            let tt = t || 2
-	            let nn = n || 100
-	            let url = 'http://odetoall.applinzi.com/weixin/sreach/'
-	            let data = {w:this.keyword,t:tt,n:nn}
+	            const tt = t || 2
+	            const nn = n || 20
+	            const url = 'http://odetoall.applinzi.com/weixin/sreach/'
+	            const data = {w:this.keyword,t:tt,n:nn}
 	            this.updateSearchResult({ajaxurl:url,querydata:data})
 	            this.changeSearchKeyword(this.keyword)
 	            if (typeof after === 'function') {
@@ -118,7 +116,7 @@
 	        	this.search(2,10,()=>{
 	        		this.$nextTick(() => {
 	                	setTimeout(() => {
-				            this.$router.push({name: 'search'})
+				            this.$router.push({name: 'search',query: { q: this.keyword,t:2,n:10 }})
 		                }, 100)
 		            })
 	        	})

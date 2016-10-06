@@ -5,10 +5,10 @@
         </div>
 		<div class="search-tabs">
 			<div class="search-tab">
-				<a class="inline-block search-tab-btn active" @click="search(2,10,1)" v-addactive="{classname:'active',vflag:flag,elclass:'inline-block search-tab-btn'}">
+				<a class="inline-block search-tab-btn active" @click="search(2,10)" v-addactive="{classname:'active',vflag:cflag,elclass:'inline-block search-tab-btn'}">
 					<span>歌单</span>
 				</a>
-				<a class="inline-block search-tab-btn" @click="search(1,15,2)" v-addactive="{classname:'active',vflag:!flag,elclass:'inline-block search-tab-btn'}">
+				<a class="inline-block search-tab-btn" @click="search(1,15)" v-addactive="{classname:'active',vflag:!cflag,elclass:'inline-block search-tab-btn'}">
 					<span>单曲</span>
 				</a>
 			</div>
@@ -38,7 +38,7 @@
 					</a>
 				</li>
 			</ul>
-			<h2 v-else>暂无结果，请重新搜索</h2>
+			<h2 v-else class="none-result">暂无结果，请重新搜索</h2>
 		</div>
 	</div>
 </template>
@@ -93,10 +93,26 @@
 				width 1.5rem
 				height 1.5rem
 				float left
+.none-result
+	height 1.2rem
+	line-height 1.2rem
+	text-align center
+	font-size .5rem
+	font-weight normal
 </style>
 <script>
 	import { mapGetters, mapActions } from 'vuex'
 	import TopBar from '../../components/TopBar.vue'
+
+	const url = 'http://odetoall.applinzi.com/weixin/sreach/'
+
+	function fetchSeacrchItem(store,w,t,n) {
+        const tt = t || 2
+	    const nn = n || 20
+	    const ww = w //|| '华语'
+        const data = {w:ww,t:tt,n:nn}
+        return store.dispatch('updateSearchResult', {ajaxurl:url,querydata:data})
+    }
 
 	export default{
 		data(){
@@ -105,22 +121,42 @@
 				flag:true
 			}
 		},
+		preFetch:fetchSeacrchItem,
 		components:{
 			topbar:TopBar
 		},
 		computed:{
-			...mapGetters({searchResult:'searchResult',searchKeyword:'searchKeyword'})
+			...mapGetters({searchResult:'searchResult',searchKeyword:'searchKeyword'}),
+			cflag(){
+				return this.flag
+			}
 		},
 		methods:{
 			...mapActions(['updateSearchResult','changeSearchKeyword']),
-			search(t,n,type){
+			search(t,n){
 	            //搜索t 1：单曲，2：歌单，3：歌手，4：专辑，5：mv
-	            //条数n 默认100条
-	            let url = 'http://odetoall.applinzi.com/weixin/sreach/'
-	            let data = {w:this.searchKeyword,t:t,n:n}
+	            //n 默认100条
+	            if (this.searchKeyword === '') {
+	            	alert('请输入搜索关键词')
+	            	return false
+	            }
+	            this.$router.push({name: 'search',query: { q:this.searchKeyword,t:t,n:n }})
+	            const data = {w:this.searchKeyword,t:t,n:n}
 	            this.updateSearchResult({ajaxurl:url,querydata:data})
-	            this.flag = !this.flag
+	            this.changeFlag()
 	        },
+	        changeFlag(){
+	        	if (this.$route.query.t == 1) {
+	            	this.flag = false
+	            } else {
+	            	this.flag = true
+	            }
+	        }
+		},
+		beforeMount(){
+			this.changeSearchKeyword(this.$route.query.q)
+			this.changeFlag()
+			fetchSeacrchItem(this.$store,this.$route.query.q,this.$route.query.t,this.$route.query.n)
 		}
    	}
 </script>

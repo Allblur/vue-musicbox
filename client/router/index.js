@@ -28,7 +28,8 @@ export default new Router({
 		{
 			name:'search',
 			path:'/search',
-			component:Search
+			component:Search,
+			query: {q:'',t:2,n:10}
 		},
 		{
 			name:'detail',
