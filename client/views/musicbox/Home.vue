@@ -9,11 +9,11 @@
 <style lang="stylus">
 @media (max-width 860px)
     .header .inner
-        padding 15px 30px
+        padding 10px
 
 @media (max-height 568px)
     .header .inner
-        height 1.7rem
+        height 55px
 
 @media (max-width 600px)
     body

@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<topbar></topbar>
         <div class="playlist-detail" v-if="playlistDetail.name">
         	<div class="detail-header">
         		<div class="dh">
@@ -43,7 +44,6 @@
 	ul,li
 		list-style none
 	.playlist-detail
-		margin-top -55px
 		.detail-header
 			padding .3rem .3rem 0
 			.dh
@@ -129,7 +129,7 @@
 						height 1.6rem
 						top 0
 						right 0
-						background #fff url(../../assets/img/delete.png) center / 55% no-repeat
+						background #fff url(../../assets/img/delete.png) center / 40% no-repeat
 						transform rotate(45deg)
 	.ds
 		p

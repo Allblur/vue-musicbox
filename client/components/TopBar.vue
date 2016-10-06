@@ -1,12 +1,15 @@
 <template>
 	<div class="header">
 		<div class="inner">
-			<router-link :to="{ name: 'homepage' }" class="block" v-show="changeIocn">
+			<a @click="back" class="block" v-show="changeIocn">
 				<i class="block play-pic" id="comeback"></i>
-			</router-link>
-			<div :class="[isActive ? 'activeSearchClass' : '', 'search-wrap']">
-				<input placeholder="搜索音乐、歌手、歌单" class="search-input" v-model="keyword" type="text" @focus="changeSearchbox" @blur="reisActive">
-				<button class="block tosearch" @click="toSearch" v-show="isActive"></button>
+			</a>
+			<div class="search-wrap">
+				<form action="/search" method="GET">
+					<input placeholder="搜索音乐、歌单" class="search-input" v-model="keyword" type="search" name="q" @blur="reisActive">
+					<input type="hidden" name="t" value="2">
+					<input type="hidden" name="n" value="10">
+				</form>
 			</div>
 			<router-link :to="{ name: 'play' }" class="block" v-show="!changeIocn">
 				<i class="block play-pic"></i>
@@ -20,45 +23,25 @@
 		display flex
 		flex-direction row
 		justify-content space-around
-		flex-wrap wrap
+		flex-wrap nowrap
 		width 100%
-		height 1.47rem
+		height 55px
 		box-sizing border-box
 		margin 0px auto
 		padding 10px !important
 		.search-wrap
-			width 7.8rem
-			height 1rem
+			width 90%
+			height 35px
+			text-align center
 			.search-input
-				padding 5px 10px
-				height 22px
-				width 6.94rem
-				line-height 22px
+				padding 5px
+				height 35px
+				width 7.5rem
 				background-color #fff
 				border 1px solid #fefefe
 				border-radius 4px
 				color #353535
 				font-size 14px
-		.search-wrap.activeSearchClass
-			position absolute
-			width 96%
-			top 10px
-			left 2%
-			.search-input
-				width 8rem
-			.tosearch
-				position absolute
-				width 1.4rem
-				height 34px
-				line-height 34px
-				top 0px
-				right 1px
-				border #fff solid 1px
-				border-left-width 0px
-				border-radius 0 4px 4px 0
-				background #fff url(../assets/img/search.png) center no-repeat
-				background-size 50%
-				
 		a
 			width 1.6rem
 			height 1rem
@@ -85,7 +68,6 @@
 		data(){
 			return {
 				changeIocn:true,
-				isActive:false,
 				keyword:''
 			}
 		},
@@ -94,13 +76,12 @@
 			if (this.$route.path.indexOf('index') != -1) {
 				this.changeIocn = false
 			}
-			this.isActive = false
 		},
-		conputed:{
+		/*conputed:{
 			...mapGetters({searchKeyword:'searchKeyword'})
-		},
+		},*/
 		methods:{
-			...mapActions(['updateSearchResult','changeSearchKeyword']),
+			/*...mapActions(['updateSearchResult','changeSearchKeyword']),
 			search(t,n,after){
 	            const tt = t || 2
 	            const nn = n || 20
@@ -120,16 +101,15 @@
 		                }, 100)
 		            })
 	        	})
-	        },
-	        changeSearchbox(){
-				this.isActive = true
+	        },*/
+	        back(){
+	        	this.$router.go(-1)
 	        },
 	        reisActive(){
 	        	this.$nextTick(() => {
 	                setTimeout(() => {
 	                	this.keyword = ''
-			            this.isActive = false
-	                }, 200)
+	                }, 50)
 	            })
 	        	
 	        }
