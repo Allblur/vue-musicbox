@@ -9,7 +9,7 @@
 			<div class="list-div">
 				<ul class="list-ul">
 					<li v-for="(item,index) in songlist">
-						<a class="select-song" @click="selectSongPlay(index)">{{item.name}}</a>
+						<a :class="[index==sIndex ? 'active' : '']" class="select-song" @click="selectSongPlay(index)">{{item.name}}</a>
 						<span class="delete-song" @click="deleteSong(index)"></span>
 					</li>
 				</ul>
@@ -305,6 +305,9 @@
 			}),
 			songlistLen(){
 				return this.songItme.length
+			},
+			sIndex(){
+				return this.activeindex
 			}
 		},
 		mounted(){
@@ -337,7 +340,6 @@
 				this.changeSongAlbum(this.songalbum)
 				this.changeSongName(this.songname)
 				this.changeSongArt(this.songart)
-				this.addActive(this.activeindex)
 			},
 			initPlayer(){
 				let i = localStorage.getItem('activeindex') ? localStorage.getItem('activeindex') : this.index
@@ -361,20 +363,12 @@
 		        }
 		        localStorage.setItem("playModel", this.playmodel)
 		    },
-			addActive(index){
-		        let element = document.querySelectorAll('.select-song')
-		        for (let i = 0, j = element.length; i < j; i++) {
-		            element[i].className = 'select-song'
-		        }
-		        element[index].className = 'select-song active'
-		    },
 		    playControll(index){
 		    	this.songduration = '00:00'
 		        this.songcurrentTime = '00:00'
 		        this.updatePlayerSate(this.songItme[index])
 		        document.title = 'vue-music - '+this.songname+' - '+this.songart
 		        let audio = document.getElementById("audio")
-		        this.addActive(index)
 		        this.$nextTick(() => {
 	                setTimeout(() => {
 		        		audio.play()

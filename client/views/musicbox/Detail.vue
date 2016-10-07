@@ -2,7 +2,7 @@
 	<div>
 		<topbar></topbar>
         <div class="playlist-detail" v-if="playlistDetail.name">
-        	<div class="detail-header">
+        	<div class="detail-header" :style="style">
         		<div class="dh">
         			<img :src="playlistDetail.coverImgUrl" :alt="playlistDetail.name" class="block cover-img">
 					<div class="detail-info">
@@ -45,7 +45,7 @@
 		list-style none
 	.playlist-detail
 		.detail-header
-			padding .3rem .3rem 0
+			padding .3rem .3rem
 			.dh
 				height 3.4rem
 				overflow hidden
@@ -155,6 +155,16 @@
             }),
             playlistcount(){
             	return this.playlistDetail.tracks ? this.playlistDetail.tracks.length : 0
+            },
+            backgroundImg(){
+            	return this.playlistDetail.coverImgUrl 
+            			? this.playlistDetail.coverImgUrl 
+            			: ''
+            },
+            style(){
+            	return {
+            		/*background:'url('+this.backgroundImg+') center center / cover no-repeat'*/
+            	}
             }
         },
 		components:{

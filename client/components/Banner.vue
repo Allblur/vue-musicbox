@@ -3,8 +3,8 @@
         <div class="banner-box"
              :style="{ transform:'translateX(-'+n+'%)',transition:speed}">
             <div class="banner-img"
-                 v-for="(m,key) in img"
-                 :style="{ transform:'translateX('+key+'00%)' }"
+                 v-for="(m,k) in img"
+                 :style="{ transform:'translateX('+k+'00%)' }"
                  @touchstart="tstart"
                  @touchmove="tmove"
                  @touchend="tend"
@@ -15,8 +15,8 @@
         </div>
         <div class="control-box">
             <ul class="inline-block circle">
-                <li v-for="(m,key) in img"
-                    :class="[key==index ? 'on':'']" class="inline-block">
+                <li v-for="(m,k) in img"
+                    :class="[k==index ? 'on':'']" class="inline-block">
                 </li>
             </ul>
         </div>

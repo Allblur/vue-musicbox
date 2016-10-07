@@ -97,7 +97,7 @@
 	height 1.2rem
 	line-height 1.2rem
 	text-align center
-	font-size .5rem
+	font-size 16px
 	font-weight normal
 </style>
 <script>
