@@ -5,18 +5,15 @@
         </div>
 		<div class="search-tabs">
 			<div class="search-tab">
-				<a class="inline-block search-tab-btn active" @click="search(2,10)" v-addactive="{classname:'active',vflag:cflag,elclass:'inline-block search-tab-btn'}">
-					<span>歌单</span>
-				</a>
-				<a class="inline-block search-tab-btn" @click="search(1,15)" v-addactive="{classname:'active',vflag:!cflag,elclass:'inline-block search-tab-btn'}">
-					<span>单曲</span>
+				<a v-for="(val,index) in stype" class="inline-block search-tab-btn" :class="[val.type==t?'active':'']" @click="search(val.type,10)">
+					<span>{{val.text}}</span>
 				</a>
 			</div>
 		</div>
 		<div class="search-result">
 			<ul class="result-list" v-if="searchResult">
 				<li v-for="(item,index) in searchResult">
-					<router-link :to="{ name: 'detail', params: { playlistId: item.id } }" class="block" v-if="item.creator">
+					<router-link :to="{ name: 'detail', params: { playlistId: item.id } }" class="block" v-if="t==2">
 						<img :src="item.coverImgUrl" :alt="item.name" class="block rsimg" width="50" height="50">
 						<div class="result-info">
 							<h3 class="result-t">{{item.name}}</h3>
@@ -27,12 +24,21 @@
 							</p>
 						</div>
 					</router-link>
-					<a class="block" v-else>
-						<img :src="item.album.artist.img1v1Url" :alt="item.name" class="block rsimg" width="50" height="50">
+					<a class="block" v-if="t==1">
+						<img :src="item.artists[0].img1v1Url" :alt="item.name" class="block rsimg" width="50" height="50">
 						<div class="result-info">
 							<h3 class="result-t">{{item.name}}</h3>
 							<p>
 							{{item.artists[0].name}}&nbsp;-&nbsp;{{item.album.name}}
+							</p>
+						</div>
+					</a>
+					<a class="block" v-if="t==5">
+						<img :src="item.cover" :alt="item.name" class="block rsimg" width="50" height="50">
+						<div class="result-info">
+							<h3 class="result-t">{{item.name}}</h3>
+							<p>
+							{{item.artists[0].name}}
 							</p>
 						</div>
 					</a>
@@ -117,6 +123,11 @@
 	export default{
 		data(){
 			return{
+				stype:[
+					{type:2,text:'歌单'},
+					{type:1,text:'单曲'},
+					{type:5,text:'MV'}
+				],
 				msg:'wellcome to vue-musicbox',
 				flag:true
 			}
@@ -127,8 +138,8 @@
 		},
 		computed:{
 			...mapGetters({searchResult:'searchResult',searchKeyword:'searchKeyword'}),
-			cflag(){
-				return this.flag
+			t(){
+				return this.$route.query.t
 			}
 		},
 		methods:{
@@ -140,22 +151,13 @@
 	            	alert('请输入搜索关键词')
 	            	return false
 	            }
-	            this.$router.push({name: 'search',query: { q:this.searchKeyword,t:t,n:n }})
 	            const data = {w:this.searchKeyword,t:t,n:n}
 	            this.updateSearchResult({ajaxurl:url,querydata:data})
-	            this.changeFlag()
-	        },
-	        changeFlag(){
-	        	if (this.$route.query.t == 1) {
-	            	this.flag = false
-	            } else {
-	            	this.flag = true
-	            }
+	            this.$router.push({name: 'search',query: { q:this.searchKeyword,t:t,n:n }})
 	        }
 		},
 		beforeMount(){
 			this.changeSearchKeyword(this.$route.query.q)
-			this.changeFlag()
 			fetchSeacrchItem(this.$store,this.$route.query.q,this.$route.query.t,this.$route.query.n)
 		}
    	}

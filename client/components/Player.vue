@@ -105,6 +105,7 @@
 					height 6rem
 					overflow-x hidden
 					overflow-y auto
+					-webkit-overflow-scrolling touch
 					li
 						position relative
 						overflow hidden

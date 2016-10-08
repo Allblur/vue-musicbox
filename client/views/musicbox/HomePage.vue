@@ -99,7 +99,7 @@
 	import Banner from '../../components/Banner.vue'
     
     function fetchBannerItem(store) {
-        const url = 'http://odetoall.applinzi.com/weixin/getnewalbum/'
+        const url = 'http://odetoall.applinzi.com/weixin/newalbums/'
         const data = {
             offset:5,
             limit:5
