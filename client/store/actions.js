@@ -5,14 +5,14 @@ const makeAction = (type) => {
 }
 
 const fetchMakeAction = (type) => {
-		return ({commit, state},arg) => {
-			if (arg.ajaxurl) {
-				return fetchItem(arg).then((items) => {
-					commit(type, items.list)
-				})
-			}
-			commit(type, arg)
+	return ({commit, state},arg) => {
+		if (arg.ajaxurl) {
+			return fetchItem(arg).then((items) => {
+				commit(type, items.list)
+			})
 		}
+		commit(type, arg)
+	}
 }
 
 export const changePbIsShow = makeAction('CHANGE_PDISSHOW')
@@ -27,6 +27,8 @@ export const deleteLikePlaylist = makeAction('DELETE_LIKEPLAYLIST')
 export const changeSongAlbum = makeAction('CHANGE_SONGALBUM')
 export const changeSongName = makeAction('CHANGE_SONGNAME')
 export const changeSongArt = makeAction('CHANGE_SONGART')
+export const changeSongUrl = makeAction('CHANGE_SONGURL')
+export const changeCplayclass = makeAction('CHANGE_CPLAYCLASS')
 export const updateSearchResult = fetchMakeAction('UPDATE_SEARCHRESULT')
 export const changeSearchKeyword = makeAction('CHANGE_SEARCHKEYWORD')
 export const updateIndexData = fetchMakeAction('UPDATE_INDEXDATA')

@@ -69,7 +69,8 @@
 				songIndex:'songIndex',
 				songalbum:'songAlbum',
 				songname:'songName',
-				songart:'songArt'
+				songart:'songArt',
+				songUrl:'songUrl'
 			})
 		},
 		components:{

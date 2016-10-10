@@ -26,6 +26,14 @@ export const songArt = state => {
 	return state.songArt
 }
 
+export const songUrl = state => {
+	return state.songUrl
+}
+
+export const cPlayClass = state => {
+	return state.cPlayClass
+}
+
 export const searchResult = state => {
 	return state.searchResult
 }

@@ -3,8 +3,8 @@ import Vue from 'vue'
 const superagent = require('superagent')
 
 function fetch (arg) {
-    let url = arg.ajaxurl || ''
-    let datas = arg.querydata ? arg.querydata : {}
+    const url = arg.ajaxurl || ''
+    const datas = arg.querydata ? arg.querydata : {}
     return new Promise((resolve, reject) => {
         superagent
         .get(url)
@@ -18,19 +18,6 @@ function fetch (arg) {
         })
     })
 }
-
-/*function getTopPlaylist(){
-    superagent
-    .get('http://127.0.0.1:3333/topplaylistapi/')
-    .query({})
-    .end((err,response) => {
-        if (err) {
-            console.log('error!' + err)
-            return
-        }
-        console.log('playlist:::'+response.body)
-    })
-}*/
 
 export default function fetchItem (arg) {
     return fetch(arg)

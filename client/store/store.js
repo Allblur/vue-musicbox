@@ -15,6 +15,8 @@ const state = {
     songAlbum:'http://p4.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg',
     songName:'',
     songArt:'',
+    songUrl:'',
+    cPlayClass:'play-icon',
     searchKeyword:'',
     searchResult:{},
     indexData:[],

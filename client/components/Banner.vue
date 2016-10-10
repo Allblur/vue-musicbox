@@ -8,7 +8,7 @@
                  @touchstart="tstart"
                  @touchmove="tmove"
                  @touchend="tend"
-                 @click="toDetail(m.id)"
+                 @click="toDetailPage(m.id)"
             >
                 <img :src = "m.picUrl" :alt="m.name">
             </div>
@@ -150,7 +150,7 @@
                     this.turnNext()
                 }
             },
-            toDetail(id){
+            toDetailPage(id){
                 this.$router.push({name: 'detail', params: { playlistId: id }})
             }
         },

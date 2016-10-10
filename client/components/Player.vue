@@ -9,7 +9,9 @@
 			<div class="list-div">
 				<ul class="list-ul">
 					<li v-for="(item,index) in songlist">
-						<a :class="[index==sIndex ? 'active' : '']" class="select-song" @click="selectSongPlay(index)">{{item.name}}</a>
+						<a :class="[index==sIndex ? 'active' : '']" class="select-song" @click="selectSongPlay(index)">
+							{{item.name}}&nbsp;-&nbsp;{{item.artists[0].name}}
+						</a>
 						<span class="delete-song" @click="deleteSong(index)"></span>
 					</li>
 				</ul>
@@ -19,11 +21,11 @@
 			<div class="time-line" :style="{'width':progressValues}"></div>
 			<div class="mini-box">
 				<router-link to="/play" class="m-album">
-                    <img :src="songalbum" :alt="songname">
+                    <img :src="songAlbum" :alt="songName">
                 </router-link>
 				<div class="m-song-info">
-					<h3>{{songname}}</h3>
-					<p>{{songart}}</p>
+					<h3>{{songName}}</h3>
+					<p>{{songArt}}</p>
 				</div>
 				<div class="m-btns">
 					<div class="play-btns"><a class="icons pmenu-icon" @click="changeIsShowSonglist">播放列表</a></div>
@@ -61,7 +63,7 @@
 		        </div>
 		    </div>
 		</div>
-		<audio id="audio" :src="songurl" preload="metadata" currenttime="true" @timeupdate="timeupdateAu" class="hide"></audio>
+		<audio id="audio" :src="songUrl" preload="metadata" currenttime="true" @timeupdate="timeupdateAu" class="hide"></audio>
 	</div>
 </template>
 <style lang="stylus">
@@ -118,7 +120,7 @@
 							white-space nowrap
 							text-overflow ellipsis
 							overflow hidden
-						.select-song:after
+						.select-song::after
 							content ''
 							position absolute
 							bottom 0
@@ -271,7 +273,7 @@
 			return {
 				isShow:false,
 				isShowSonglist:false,
-				activeindex:0,
+				songIndex:0,
 				songurl:'',
 				songalbum:'',
 				songname:'',
@@ -282,7 +284,6 @@
 				activeClass:false,
 				cPlayClassName:'random',
 				iconsClass:'icons',
-				cPlayClass:'play-icon',
 				playmodel:'loop'
 			}
 		},
@@ -302,51 +303,55 @@
 		computed:{
 			...mapGetters({
 				pbIsShow:'pbIsShow',
-				songItme:'songItme'
+				songItme:'songItme',
+				songUrl:'songUrl',
+				songAlbum:'songAlbum',
+				songName:'songName',
+				songArt:'songArt',
+				cPlayClass:'cPlayClass',
+				songIndex:'songIndex'
 			}),
 			songlistLen(){
 				return this.songItme.length
 			},
 			sIndex(){
-				return this.activeindex
+				return this.songIndex
 			}
 		},
 		mounted(){
 			this.getDefaultSonglist(77149051)
-			this.$nextTick(() => {
-	            setTimeout(() => {
-	                this.initPlayer()
-	            }, 500)
-	        })
+            setTimeout(() => {
+                this.initPlayer()
+                localStorage.setItem("songItem", JSON.stringify(this.songItme))
+            }, 500)
 		},
 		methods:{
-			...mapActions(['setSongIndex','updateSongItem','emptySongItem','deleteSongItem','changeSongAlbum','changeSongName','changeSongArt']),
+			...mapActions(['setSongIndex','updateSongItem','emptySongItem','deleteSongItem','changeSongAlbum','changeSongName','changeSongArt','changeSongUrl','changeCplayclass']),
 			changeIsShowSonglist(){
 				this.isShowSonglist = !this.isShowSonglist
+				setTimeout(()=>{
+					this.setPosition(this.songIndex)
+				},0)
 			},
 			toEmptySongItem(){
 				this.emptySongItem()
 				localStorage.removeItem("songItem")
-				localStorage.setItem("activeindex", 0)
+				localStorage.setItem("songIndex", 0)
 			},
 			deleteSong(index){
 				this.deleteSongItem(index)
 				localStorage.setItem("songItem", JSON.stringify(this.songItme))
 			},
 			updatePlayerSate(items){
-				this.songurl = items.hmp3Url || items[i].mp3Url
-				this.songalbum = items.album.picUrl
-				this.songname = items.name
-				this.songart = items.artists[0].name
-				this.changeSongAlbum(this.songalbum)
-				this.changeSongName(this.songname)
-				this.changeSongArt(this.songart)
+				this.changeSongAlbum(items.album.picUrl)
+				this.changeSongName(items.name)
+				this.changeSongArt(items.artists[0].name)
+				this.changeSongUrl(items.mp3Url)
 			},
 			initPlayer(){
-				let i = localStorage.getItem('activeindex') ? localStorage.getItem('activeindex') : this.index
-				let items = this.songItme
+				const i = localStorage.getItem('songIndex') ? localStorage.getItem('songIndex') : this.songIndex
+				const items = this.songItme
 				this.setSongIndex(i)
-				this.activeindex = i
 				this.updatePlayerSate(this.songItme[i])
 	            if (localStorage.getItem("playModel")) {
 	                this.playmodel = localStorage.getItem("playModel")
@@ -368,13 +373,13 @@
 		    	this.songduration = '00:00'
 		        this.songcurrentTime = '00:00'
 		        this.updatePlayerSate(this.songItme[index])
-		        document.title = 'vue-music - '+this.songname+' - '+this.songart
-		        let audio = document.getElementById("audio")
+		        document.title = 'vue-music - '+this.songName+' - '+this.songArt
+		        const audio = document.getElementById("audio")
 		        this.$nextTick(() => {
 	                setTimeout(() => {
 		        		audio.play()
-		        		this.setSongIndex(this.activeindex)
-		        		localStorage.setItem("activeindex", this.activeindex)
+		        		this.setSongIndex(index)
+		        		localStorage.setItem("songIndex", this.songIndex)
 	                }, 2000)
 	            })
 
@@ -382,99 +387,105 @@
 	                setTimeout(() => {
 			            if (audio.error.code) {
 			                console.log("error::"+audio.error.code)
-			                this.activeindex = index + 1
-			                this.playControll(this.activeindex)
+			                this.setSongIndex(index + 1)
+			                this.playControll(this.songIndex)
 			            }
 	                }, 7000)
 	            })
+	            this.setPosition(this.songIndex)
 		    },
 		    selectSongPlay(index){
-		        if (this.activeindex == index && !audio.paused) return false
-		        let audio = document.getElementById("audio")
+		    	const audio = document.getElementById("audio")
+		        if (this.songIndex == index && !audio.paused) return false
 		    	this.songduration = '00:00'
 		        this.songcurrentTime = '00:00'
 		        this.progressValues = 0 + "px"
-		        this.activeindex = index
-		    	localStorage.setItem("activeindex", this.activeindex)
-		        this.playControll(this.activeindex)
+		        this.setSongIndex(index)
+		    	localStorage.setItem("songIndex", this.songIndex)
+		        this.playControll(this.songIndex)
 		    },
 		    playNext() {
 		        this.progressValues = 0 + "px"
 		        if (this.playmodel === 'random') {
-		            this.activeindex = Math.floor(Math.random()*this.songItme.length)
+		            this.setSongIndex(Math.floor(Math.random()*this.songItme.length))
 		        } else {
-		            if (this.activeindex < this.songItme.length - 1) {
-		                this.activeindex++
+		            if (this.songIndex < this.songItme.length - 1) {
+		                this.setSongIndex(this.songIndex+1)
 		            } else {
-		                this.activeindex = 0
+		                this.setSongIndex(0)
 		            }
 		        }
-		        localStorage.setItem("activeindex", this.activeindex)
-		        this.playControll(this.activeindex)
+		        localStorage.setItem("songIndex", this.songIndex)
+		        this.playControll(this.songIndex)
 		    },
 		    playPrev() {
 		    	this.progressValues = 0 + "px"
 		        if (this.playmodel === 'random') {
-		            this.activeindex = Math.floor(Math.random()*this.songItme.length)
+		            this.setSongIndex(Math.floor(Math.random()*this.songItme.length))
 		        } else {
-		            if (this.activeindex > 0) {
-		                this.activeindex--
+		            if (this.songIndex > 0) {
+		                this.setSongIndex(this.songIndex-1)
 		            }
-		            if (this.activeindex === 0) {
-		                this.activeindex = this.songItme.length - 1
+		            if (this.songIndex === 0) {
+		                this.setSongIndex(this.songItme.length - 1)
 		            }
 		        }
-		        localStorage.setItem("activeindex", this.activeindex)
-		        this.playControll(this.activeindex)
+		        localStorage.setItem("songIndex", this.songIndex)
+		        this.playControll(this.songIndex)
 		    },
 		    mstime(duration) {
-			    let cduration = parseInt(duration / 1000, 10),dduration = parseInt(cduration / 60, 10),btime = cduration - dduration * 60
+			    const cduration = isNaN(parseInt(duration / 1000, 10)) ? 0 : parseInt(duration / 1000, 10)
+			    let dduration = isNaN(parseInt(cduration / 60, 10)) ? 0 : parseInt(cduration / 60, 10)
+			    let btime = cduration - dduration * 60
 			    dduration = dduration < 0 ? "00" : dduration < 10 ? "0" + dduration : dduration //分
 			    btime = btime < 0 ? "00" : btime < 10 ? "0" + btime : btime //秒
 			    return dduration + ":" + btime
 			},
 		    timeupdateAu() {
-		        let audio = document.getElementById("audio")
-		        //let mmst = this.mstime((audio.duration - audio.currentTime)*1000)
+		        const audio = document.getElementById("audio")
+		        //const mmst = this.mstime((audio.duration - audio.currentTime)*1000)
 		        this.songduration = this.mstime(audio.duration*1000)
 		        this.songcurrentTime = this.mstime(audio.currentTime*1000)
 		        //播放完一首歌后:
 		        if (audio.currentTime === audio.duration) {
 		            if (this.playmodel === 'random') {
-		                this.activeindex = Math.floor(Math.random()*this.songItme.length)
+		                this.setSongIndex(Math.floor(Math.random()*this.songItme.length))
 		            }else if(this.playmodel === 'sloop'){
-		                this.activeindex = this.activeindex
+		                this.setSongIndex(this.songIndex)
 		            }else{
-		                this.activeindex++
-		                if (this.activeindex === this.songItme.length) {
-		                    this.activeindex = 0
+		                this.setSongIndex(this.songIndex+1)
+		                if (this.songIndex === this.songItme.length) {
+		                    this.setSongIndex(0)
 		                }
 		            }
-		            this.playControll(this.activeindex)
+		            this.playControll(this.songIndex)
 		        }
 		        this.progressValues = ((audio.currentTime / audio.duration) * 100) + '%'
 		    },
 			play() {
-				let audio = document.getElementById("audio")
+				const audio = document.getElementById("audio")
 				if (audio.paused) {
 					audio.play()
-					this.cPlayClass = 'pause-icon'
+					this.changeCplayclass('pause-icon')
 				} else {
 					audio.pause()
-					this.cPlayClass = 'play-icon'
+					this.changeCplayclass('play-icon')
 				}
-				document.title = 'vue-music - '+this.songname+' - '+this.songart
+				document.title = 'vue-music - '+this.songName+' - '+this.songArt
+			},
+			setPosition(index){
+				const h = document.querySelectorAll('.list-ul li')[0].offsetHeight
+				document.querySelector('.list-ul').scrollTop = index*h
 			},
 			getDefaultSonglist(id){
-                let url = "http://odetoall.applinzi.com/weixin/musiclist/"+id+"/"
-                let data = {}
-                let localsongItem = JSON.parse(localStorage.getItem("songItem"))
+                const url = "http://odetoall.applinzi.com/weixin/musiclist/"+id+"/"
+                const data = {}
+                const localsongItem = JSON.parse(localStorage.getItem("songItem"))
                 if (localsongItem && localsongItem.length > 0) {
                     this.updateSongItem(localsongItem)
                     return false
                 }
                 this.updateSongItem({ajaxurl:url,querydata:data})//parse
-                localStorage.setItem("songItem", JSON.stringify(this.songItme))
             }
 		}
     }

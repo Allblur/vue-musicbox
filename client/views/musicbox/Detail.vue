@@ -24,7 +24,7 @@
         		<ul>
         			<li v-for="(item,index) in playlistDetail.tracks">
         				<span class="block item-index">{{index+1}}</span>
-        				<div class="song-info">
+        				<div class="song-info" @click="playSong(index)">
         					<span class="song-name">{{item.name}}</span>
 							<span class="song-art">
 							{{item.album.artists[0].name}} - {{item.album.name}}
@@ -77,7 +77,7 @@
 				background url(../../assets/img/play.png) left center / 6% no-repeat
 			span
 				color #9a9a9a
-		.dl:after
+		.dl::after
 			content ''
 			position absolute
 			bottom 0
@@ -113,7 +113,7 @@
 							font-size .46rem
 						.song-art
 							color #9a9a9a
-					.song-info:before
+					.song-info::before
 						content ''
 						position absolute
 						bottom 0
@@ -171,16 +171,36 @@
 			topbar:TopBar
 		},
 		methods:{
-			...mapActions(['updatePlaylistDetail','updateSongItem','addSongItem']),
-			getPlaylistDetail(){
+			...mapActions(['updatePlaylistDetail','updateSongItem','addSongItem','setSongIndex','changeSongAlbum','changeSongName','changeSongArt','changeSongUrl','changeCplayclass']),
+			setPlaylistDetail(){
 				this.updatePlaylistDetail({})
 				const id = this.$route.params.playlistId
 				const url = 'http://odetoall.applinzi.com/weixin/playlistdetail/'+id+'/'
 				this.updatePlaylistDetail({ajaxurl:url,querydata:{}})
 			},
+			upDatePlayerData(index){
+				const audio = document.getElementById('audio')
+				const slist = this.playlistDetail.tracks
+				this.setSongIndex(index)
+				this.changeSongAlbum(slist[index].album.picUrl)
+				this.changeSongName(slist[index].name)
+				this.changeSongArt(slist[index].artists[0].name)
+				this.changeSongUrl(slist[index].mp3Url)
+				setTimeout(()=>{
+					audio.play()
+					this.changeCplayclass('pause-icon')
+				},1000)
+			},
 			playAll(){
-				this.updateSongItem(this.playlistDetail.tracks)
-				localStorage.setItem("songItem", JSON.stringify(this.playlistDetail.tracks))
+				const slist = this.playlistDetail.tracks
+				this.updateSongItem(slist)
+				this.upDatePlayerData(0)
+				localStorage.setItem("songItem", JSON.stringify(slist))
+				localStorage.setItem("activeindex", 0)
+			},
+			playSong(index){
+				this.addPlaysongItem(index)
+				this.upDatePlayerData(index)
 			},
 			addPlaysongItem(index){
 				const list = [this.playlistDetail.tracks[index]]
@@ -189,7 +209,7 @@
 			}
 		},
 		created(){
-			this.getPlaylistDetail()
+			this.setPlaylistDetail()
 		}
    }
 </script>

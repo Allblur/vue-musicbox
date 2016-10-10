@@ -85,7 +85,7 @@
 					line-height .95rem
 					overflow hidden
 					color #777
-			.result-info:after
+			.result-info::after
 				content ''
 				position absolute
 				bottom 0

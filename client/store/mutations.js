@@ -51,6 +51,14 @@ export default {
 		state.songArt = art
 	},
 
+	CHANGE_CPLAYCLASS(state,classname){
+		state.cPlayClass = classname
+	},
+
+	CHANGE_SONGURL(state,url){
+		state.songUrl = url
+	},
+
 	UPDATE_SEARCHRESULT(state,data){
 		state.searchResult = data
 	},

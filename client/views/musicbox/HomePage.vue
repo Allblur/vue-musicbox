@@ -42,7 +42,7 @@
 	position relative
 	text-align center
     align-items center
-.m-menu:after
+.m-menu::after
 	content ''
 	position absolute
 	bottom 0
