@@ -172,9 +172,8 @@
 		},
 		methods:{
 			...mapActions(['updatePlaylistDetail','updateSongItem','addSongItem','setSongIndex','changeSongAlbum','changeSongName','changeSongArt','changeSongUrl','changeCplayclass']),
-			setPlaylistDetail(){
+			setPlaylistDetail(id){
 				this.updatePlaylistDetail({})
-				const id = this.$route.params.playlistId
 				const url = 'http://odetoall.applinzi.com/weixin/playlistdetail/'+id+'/'
 				this.updatePlaylistDetail({ajaxurl:url,querydata:{}})
 			},
@@ -209,7 +208,7 @@
 			}
 		},
 		created(){
-			this.setPlaylistDetail()
+			this.setPlaylistDetail(this.$route.params.playlistId)
 		}
    }
 </script>

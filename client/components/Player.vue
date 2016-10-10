@@ -142,7 +142,7 @@
 							display block
 							width 1rem
 							height 1rem
-							background url(../assets/img/delete.png) center no-repeat
+							background #fff url(../assets/img/delete.png) center no-repeat
 							background-size .5rem .5rem
 							overflow hidden
 							z-index 5
@@ -320,10 +320,16 @@
 		},
 		mounted(){
 			this.getDefaultSonglist(77149051)
-            setTimeout(() => {
-                this.initPlayer()
+			let n = 0
+			let p = setInterval(()=>{
+				n++
+				this.initPlayer()
                 localStorage.setItem("songItem", JSON.stringify(this.songItme))
-            }, 500)
+                if (this.songItme.length > 0 || n > 15) {
+                	clearInterval(p)
+                	n = null
+                }
+			},1000)
 		},
 		methods:{
 			...mapActions(['setSongIndex','updateSongItem','emptySongItem','deleteSongItem','changeSongAlbum','changeSongName','changeSongArt','changeSongUrl','changeCplayclass']),
@@ -342,17 +348,17 @@
 				this.deleteSongItem(index)
 				localStorage.setItem("songItem", JSON.stringify(this.songItme))
 			},
-			updatePlayerSate(items){
-				this.changeSongAlbum(items.album.picUrl)
-				this.changeSongName(items.name)
-				this.changeSongArt(items.artists[0].name)
-				this.changeSongUrl(items.mp3Url)
+			updatePlayerSate(item){
+				this.changeSongAlbum(item.album.picUrl)
+				this.changeSongName(item.name)
+				this.changeSongArt(item.artists[0].name)
+				this.changeSongUrl(item.mp3Url)
 			},
 			initPlayer(){
-				const i = localStorage.getItem('songIndex') ? localStorage.getItem('songIndex') : this.songIndex
+				const i = localStorage.getItem('songIndex') ? localStorage.getItem('songIndex') : this.index
 				const items = this.songItme
 				this.setSongIndex(i)
-				this.updatePlayerSate(this.songItme[i])
+				this.updatePlayerSate(items[i])
 	            if (localStorage.getItem("playModel")) {
 	                this.playmodel = localStorage.getItem("playModel")
 	            } else {
@@ -370,29 +376,22 @@
 		        localStorage.setItem("playModel", this.playmodel)
 		    },
 		    playControll(index){
+		    	const audio = document.getElementById("audio")
 		    	this.songduration = '00:00'
 		        this.songcurrentTime = '00:00'
-		        this.updatePlayerSate(this.songItme[index])
 		        document.title = 'vue-music - '+this.songName+' - '+this.songArt
-		        const audio = document.getElementById("audio")
-		        this.$nextTick(() => {
-	                setTimeout(() => {
+		        this.setPosition(this.songIndex)
+		        try{
+		        	this.updatePlayerSate(this.songItme[index])
+		        	setTimeout(() => {
 		        		audio.play()
 		        		this.setSongIndex(index)
 		        		localStorage.setItem("songIndex", this.songIndex)
-	                }, 2000)
-	            })
-
-		        this.$nextTick(() => {
-	                setTimeout(() => {
-			            if (audio.error.code) {
-			                console.log("error::"+audio.error.code)
-			                this.setSongIndex(index + 1)
-			                this.playControll(this.songIndex)
-			            }
-	                }, 7000)
-	            })
-	            this.setPosition(this.songIndex)
+	                }, 3000)
+		        } catch (e) {
+		        	this.setSongIndex(index + 1)
+			        this.playControll(this.songIndex)
+		        }
 		    },
 		    selectSongPlay(index){
 		    	const audio = document.getElementById("audio")
@@ -462,7 +461,7 @@
 		        }
 		        this.progressValues = ((audio.currentTime / audio.duration) * 100) + '%'
 		    },
-			play() {
+			play(){
 				const audio = document.getElementById("audio")
 				if (audio.paused) {
 					audio.play()
