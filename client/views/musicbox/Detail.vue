@@ -36,7 +36,7 @@
         	</div>
         </div>
         <div class="ds" v-else>
-        	<p>歌单信息加载中...</p>
+        	<div class='loading' style='transform:scale(0.81);'><div></div><div></div></div>
         </div>
 	</div>
 </template>
@@ -132,11 +132,12 @@
 						background #fff url(../../assets/img/delete.png) center / 40% no-repeat
 						transform rotate(45deg)
 	.ds
-		p
-			height 1.2rem
-			line-height 1.2rem
-			text-align center
-			font-size .48rem
+		height 3rem
+		line-height 3rem
+		display flex
+		justify-content center
+		text-align center
+
 </style>
 <script>
 	import { mapGetters, mapActions } from 'vuex'

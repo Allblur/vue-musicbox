@@ -44,7 +44,9 @@
 					</a>
 				</li>
 			</ul>
-			<h2 v-else class="none-result">暂无结果，请重新搜索</h2>
+			<div v-else class="none-result">
+				<div class='loading' style='transform:scale(0.81);'><div></div><div></div></div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -100,11 +102,11 @@
 				height 1.5rem
 				float left
 .none-result
-	height 1.2rem
-	line-height 1.2rem
+	height 3rem
+	line-height 3rem
+	display flex
+	justify-content center
 	text-align center
-	font-size 16px
-	font-weight normal
 </style>
 <script>
 	import { mapGetters, mapActions } from 'vuex'

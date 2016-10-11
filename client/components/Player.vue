@@ -379,7 +379,6 @@
 		    	const audio = document.getElementById("audio")
 		    	this.songduration = '00:00'
 		        this.songcurrentTime = '00:00'
-		        document.title = 'vue-music - '+this.songName+' - '+this.songArt
 		        this.setPosition(this.songIndex)
 		        try{
 		        	this.updatePlayerSate(this.songItme[index])
@@ -470,7 +469,6 @@
 					audio.pause()
 					this.changeCplayclass('play-icon')
 				}
-				document.title = 'vue-music - '+this.songName+' - '+this.songArt
 			},
 			setPosition(index){
 				const h = document.querySelectorAll('.list-ul li')[0].offsetHeight
