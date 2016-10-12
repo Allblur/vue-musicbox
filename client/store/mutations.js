@@ -19,6 +19,7 @@ export default {
 
 	DELETE_SONGITEM(state,index){
 		state.songItme.splice(index,1)
+		state.songIndex--
 	},
 
 	SET_SONGINDEX(state,index){
@@ -76,5 +77,8 @@ export default {
 
 	UPDATE_PLAYLISTDETAIL(state,data){
 		state.playlistDetail = data
+	},
+	CHANGE_APPCLASSNAME(state,classname){
+		state.appClassName = classname
 	},
 }

@@ -127,10 +127,13 @@
         },
         preFetch:fetchBannerItem,
 		methods:{
-			...mapActions(['updateIndexData','updatePlaylistDetail']),
+			...mapActions(['updateIndexData','updatePlaylistDetail','changeAppClassName']),
 			toDetail(id){
 				this.$router.push({name: 'detail', params: { playlistId: id }})
 			}
+		},
+		created(){
+			this.changeAppClassName('')
 		},
 		beforeMount(){
 			fetchBannerItem(this.$store)

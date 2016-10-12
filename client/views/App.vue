@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" :class="appClassName">
         <transition name="fade" mode="out-in">
             <router-view class="view" style="margin-bottom:90px"></router-view>
         </transition>
@@ -209,7 +209,8 @@
         },
         computed:{
             ...mapGetters({
-                songItme:'songItme'
+                songItme:'songItme',
+                appClassName:'appClassName'
             })
         }
     }

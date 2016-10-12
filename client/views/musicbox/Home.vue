@@ -21,10 +21,6 @@
     .header
         .inner
             padding 15px
-    a
-        margin-right 1em
-    .github
-        display none
 
 .header
     background-color rgba(12,12,12,.8)
@@ -63,7 +59,7 @@
         },
         preFetch:fetchItem,
 		methods:{
-            ...mapActions(['changePbIsShow'])
+            ...mapActions(['changePbIsShow','changeAppClassName'])
         },
         computed:{
             ...mapGetters({
@@ -75,6 +71,7 @@
             fetchItem(this.$store)
         },
         created(){
+            this.changeAppClassName('')
             this.changePbIsShow(false)
         }
     }

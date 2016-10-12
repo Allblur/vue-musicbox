@@ -28,15 +28,16 @@
 		height 55px
 		box-sizing border-box
 		margin 0px auto
-		padding 10px !important
+		padding 0px !important
 		.search-wrap
 			width 90%
 			height 35px
+			margin-top 10px
 			text-align center
 			.search-input
 				padding 5px
 				height 35px
-				width 7.5rem
+				width 7.8rem
 				background-color #fff
 				border 1px solid #fefefe
 				border-radius 4px
@@ -56,11 +57,12 @@
 			height 34px
 			line-height 34px
 			margin-right 0px
+			padding 10px
 			display inline-block
 			color #fff
 		#comeback
-			background url(../assets/img/comeback.png) center no-repeat
-			background-size 70%
+			background url(../assets/img/back.png) center no-repeat
+			background-size 80%
 </style>
 <script>
 	import { mapGetters, mapActions } from 'vuex'

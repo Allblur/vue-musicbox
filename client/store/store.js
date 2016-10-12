@@ -21,7 +21,8 @@ const state = {
     searchResult:{},
     indexData:[],
     bannerData:[],
-    playlistDetail:{}
+    playlistDetail:{},
+    appClassName:''
 }
 
 export default new Vuex.Store({

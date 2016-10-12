@@ -145,7 +145,7 @@
 			}
 		},
 		methods:{
-			...mapActions(['updateSearchResult','changeSearchKeyword']),
+			...mapActions(['updateSearchResult','changeSearchKeyword','changeAppClassName']),
 			search(t,n){
 	            //搜索t 1：单曲，2：歌单，3：歌手，4：专辑，5：mv
 	            //n 默认100条
@@ -158,6 +158,9 @@
 	            this.$router.push({name: 'search',query: { q:this.searchKeyword,t:t,n:n }})
 	        }
 		},
+		created(){
+            this.changeAppClassName('')
+        },
 		beforeMount(){
 			this.changeSearchKeyword(this.$route.query.q)
 			fetchSeacrchItem(this.$store,this.$route.query.q,this.$route.query.t,this.$route.query.n)

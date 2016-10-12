@@ -1,6 +1,6 @@
 <template>
 	<div class="player-box">
-		<div class="song-list-box" v-show="isShowSonglist">
+		<div class="song-list-box" :class="[isShowSonglist ? 'show' : '']">
 			<div class="song-list-title">
 				<div class="st sa"><a>收藏全部</a></div>
 				<div class="st si"><p>播放列表({{songlistLen}})</p></div>
@@ -15,6 +15,9 @@
 						<span class="delete-song" @click="deleteSong(index)"></span>
 					</li>
 				</ul>
+			</div>
+			<div class="close-list">
+				<a href="javascript:;" class="block" @click="changeIsShowSonglist">关&nbsp;闭</a>
 			</div>
 		</div>
 		<div class="mini-player" v-show="!pbIsShow">
@@ -77,8 +80,14 @@
 		left 0px
 		z-index: 9999
 		.song-list-box
-			height 7.3rem
+			height 9.5rem
 			border-top 1px solid #dedede
+			background-color #fff
+			position absolute
+			z-index 10000
+			bottom -9.5rem
+			left 0
+			transition bottom .3s ease-in .1s
 			overflow hidden
 			.song-list-title
 				height 1.3rem
@@ -98,13 +107,20 @@
 					line-height 1.3rem
 					margin-right 0
 					font-size .36rem
+			.close-list
+				height 1.2rem
+				line-height 1.2rem
+				border-top 1px solid #dedede
+				background-color #f3f3f3
+				text-align center
+				font-size 16px
 			.list-div
-				height 6rem
+				height 7rem
 				width 100%
 				position relative
 				overflow hidden
 				.list-ul
-					height 6rem
+					height 7rem
 					overflow-x hidden
 					overflow-y auto
 					-webkit-overflow-scrolling touch
@@ -112,7 +128,7 @@
 						position relative
 						overflow hidden
 						.select-song
-							margin 0 .3rem
+							margin 0 2vw
 							display block
 							height 1.2rem
 							line-height 1.2rem
@@ -125,7 +141,7 @@
 							position absolute
 							bottom 0
 							left 0
-							width 100%
+							width 96vw
 							height 1px
 							background-color #dedede
 							transform scaleY(0.5)
@@ -146,6 +162,8 @@
 							background-size .5rem .5rem
 							overflow hidden
 							z-index 5
+		.song-list-box.show
+			bottom 0px
 		.play-bar-box
 			width 100%
 			height 30px
@@ -154,6 +172,7 @@
 			.now-time,.all-time
 				flex 1
 				text-align center
+				color #fafafa
 			.play-bar
 				position relative
 				width 70%
@@ -348,7 +367,7 @@
 				this.deleteSongItem(index)
 				localStorage.setItem("songItem", JSON.stringify(this.songItme))
 			},
-			updatePlayerSate(item){
+			updatePlayerState(item){
 				this.changeSongAlbum(item.album.picUrl)
 				this.changeSongName(item.name)
 				this.changeSongArt(item.artists[0].name)
@@ -358,7 +377,7 @@
 				const i = localStorage.getItem('songIndex') ? localStorage.getItem('songIndex') : this.index
 				const items = this.songItme
 				this.setSongIndex(i)
-				this.updatePlayerSate(items[i])
+				this.updatePlayerState(items[i])
 	            if (localStorage.getItem("playModel")) {
 	                this.playmodel = localStorage.getItem("playModel")
 	            } else {
@@ -381,7 +400,7 @@
 		        this.songcurrentTime = '00:00'
 		        this.setPosition(this.songIndex)
 		        try{
-		        	this.updatePlayerSate(this.songItme[index])
+		        	this.updatePlayerState(this.songItme[index])
 		        	setTimeout(() => {
 		        		audio.play()
 		        		this.setSongIndex(index)
@@ -462,12 +481,15 @@
 		    },
 			play(){
 				const audio = document.getElementById("audio")
+				const album = document.getElementById("album")
 				if (audio.paused) {
 					audio.play()
 					this.changeCplayclass('pause-icon')
+					album.style.animationPlayState = 'running'
 				} else {
 					audio.pause()
 					this.changeCplayclass('play-icon')
+					album.style.animationPlayState = 'paused'
 				}
 			},
 			setPosition(index){

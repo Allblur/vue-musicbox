@@ -53,3 +53,7 @@ export const bannerData = state => {
 export const playlistDetail = state => {
 	return state.playlistDetail
 }
+
+export const appClassName = state => {
+	return state.appClassName
+}

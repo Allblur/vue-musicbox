@@ -172,7 +172,7 @@
 			topbar:TopBar
 		},
 		methods:{
-			...mapActions(['updatePlaylistDetail','updateSongItem','addSongItem','setSongIndex','changeSongAlbum','changeSongName','changeSongArt','changeSongUrl','changeCplayclass']),
+			...mapActions(['updatePlaylistDetail','updateSongItem','addSongItem','setSongIndex','changeSongAlbum','changeSongName','changeSongArt','changeSongUrl','changeCplayclass','changeAppClassName']),
 			setPlaylistDetail(id){
 				this.updatePlaylistDetail({})
 				const url = 'http://odetoall.applinzi.com/weixin/playlistdetail/'+id+'/'
@@ -209,6 +209,7 @@
 			}
 		},
 		created(){
+			this.changeAppClassName('')
 			this.setPlaylistDetail(this.$route.params.playlistId)
 		}
    }
