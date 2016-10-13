@@ -108,6 +108,7 @@
 					margin-right 0
 					font-size .36rem
 			.close-list
+				width 100vw
 				height 1.2rem
 				line-height 1.2rem
 				border-top 1px solid #dedede
@@ -125,6 +126,7 @@
 					overflow-y auto
 					-webkit-overflow-scrolling touch
 					li
+						width 100vw
 						position relative
 						overflow hidden
 						.select-song
@@ -153,7 +155,7 @@
 							color #eb4f38
 						.delete-song
 							position absolute
-							right .32rem
+							right 0rem
 							top .15rem
 							display block
 							width 1rem
@@ -356,7 +358,7 @@
 				this.isShowSonglist = !this.isShowSonglist
 				setTimeout(()=>{
 					this.setPosition(this.songIndex)
-				},0)
+				},50)
 			},
 			toEmptySongItem(){
 				this.emptySongItem()
